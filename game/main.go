@@ -56,6 +56,9 @@ func main() {
 
 // web server
 func main() {
+	//db := poker.InitPokerDB()
+	//InitAccounts(db)
+	//repository.PrintAllAccounts(db)
 	var pokerGame poker.PokerGame
 
 	// web server
