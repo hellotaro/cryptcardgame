@@ -1,23 +1,13 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
+	"game/chinchiro"
+	"game/common"
 	"game/poker"
-	"game/repository"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 )
-
-func InitAccounts(db *sql.DB) {
-	names := []string{"Alice", "Bob", "Cathy", "David", "Emma", "Freddy", "George", "Hass", "Iona", "Jane", "Kathy"}
-
-	for aidx := 0; aidx < len(names); aidx++ {
-		repository.InsertAccount(db, names[aidx], 10000, "strategy_"+strconv.Itoa(aidx))
-	}
-	repository.PrintAllAccounts(db)
-}
 
 /*
 // CUI
@@ -57,10 +47,26 @@ func main() {
 // web server
 func main() {
 	var pokerGame poker.PokerGame
+	var chinchiroGame chinchiro.ChinchiroGame
+	//db := common.GetCommonDBCon()
+	//common.InitCommonDB()
+	//common.InitPlayers(db)
+	//common.InitGames(db)
 
 	// web server
 	r := gin.Default()
 	r.Static("/", "./static")
+	r.POST("/api/players", func(c *gin.Context) {
+		db := common.GetCommonDBCon()
+		players := common.GetAllPlayers(db)
+		c.JSON(http.StatusOK, players)
+	})
+	r.POST("/api/games", func(c *gin.Context) {
+		db := common.GetCommonDBCon()
+		games := common.GetAllGames(db)
+		c.JSON(http.StatusOK, games)
+	})
+
 	r.POST("/api/game/poker/:action", func(c *gin.Context) {
 		action := c.Param("action")
 		logText := fmt.Sprintf("action: %v\n", action)
@@ -101,5 +107,14 @@ func main() {
 		}
 		//c.JSON(http.StatusBadRequest)
 	})
+	r.POST("/api/game/chinchiro/:action", func(c *gin.Context) {
+		action := c.Param("action")
+		if action == "action" {
+			fmt.Println("OKOK")
+			chinchiroGame = chinchiro.InitChinchiroGame()
+		}
+		c.JSON(http.StatusOK, chinchiroGame)
+	})
+
 	r.Run(":8080")
 }

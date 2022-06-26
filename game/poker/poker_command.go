@@ -120,11 +120,16 @@ func AllNPCAction(pokerGame *PokerGame) bool {
 
 	isRaised := false
 	for pidx := 1; pidx < pokerGame.PlayerNum; pidx++ {
+		// is raised player?
 		if pokerGame.LastRaisedPlayerIdx >= 1 && pokerGame.LastRaisedPlayerIdx == pidx {
 			break
 		}
+		// is all_in player?
+		if pokerGame.Players[pidx].Bet == pokerGame.Players[pidx].Fund {
+			continue
+		}
 
-		action := NPCPlay(*pokerGame, pidx, pokerGame.Fee)
+		action := NPCPlay(*pokerGame, pidx)
 		pokerGame.Players[pidx] = NPCAction(pokerGame, pidx, action)
 		pokerGame.GameHistory = append(pokerGame.GameHistory, action)
 		if action.ActionType == "raise" {

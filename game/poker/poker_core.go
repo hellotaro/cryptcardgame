@@ -17,7 +17,8 @@ type PokerGame struct {
 	LastRaisedPlayerIdx int
 	GameHistory         []PlayAction
 	GameLogInfos        []GameLogInfo
-	GameInfo            string
+	NextMyHandPred      string
+	NextTableHandPred   string
 }
 
 type HandsetInfo struct {
@@ -97,7 +98,9 @@ func CalcPokerGameScore(pokerGame *PokerGame) {
 		pokerGame.Players[pidx].Info = handsetStr
 	}
 	nextscores := CalcNextHandsetScores(append(pokerGame.Table.Cards, pokerGame.Players[0].Hand.Cards...), 1)
-	pokerGame.GameInfo = fmt.Sprintf("%v", nextscores)
+	pokerGame.NextMyHandPred = fmt.Sprintf("%v", nextscores)
+	nextscores = CalcNextHandsetScores(pokerGame.Table.Cards, 1)
+	pokerGame.NextTableHandPred = fmt.Sprintf("%v", nextscores)
 }
 
 func getBitidxAry(ary []int, count int) []int {
