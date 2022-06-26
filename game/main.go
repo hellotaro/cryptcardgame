@@ -46,6 +46,9 @@ func main() {
 
 // web server
 func main() {
+	//db := poker.InitPokerDB()
+	//InitAccounts(db)
+	//repository.PrintAllAccounts(db)
 	var pokerGame poker.PokerGame
 	var chinchiroGame chinchiro.ChinchiroGame
 	//db := common.GetCommonDBCon()
